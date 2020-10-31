@@ -331,7 +331,6 @@ patrollingRadius(64).
 	  
 +goto(X,Y,Z)[source(A)]
 	<- 	.println("Recieved a message to goto from: ", A);
-		.my_name(MyName);		
 		+order(move,X,Z)[source (_)];
 		.println("Goto crazy position: ", X," , ", Y," , ", Z);
 		-goto(_,_,_).

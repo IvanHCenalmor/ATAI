@@ -218,13 +218,17 @@ patrollingRadius(64).
  */
 +!update_targets 
 	<-	?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR UPDATE_TARGETS GOES HERE.") };
-	?my_position(Xpos,Ypos,Zpos);
-		.random(X);
-		.random(Z);
-		.my_name(MyName);
-		.println(Xpos+((X-0.5)*10),Ypos,Zpos+((Z-0.5)*10));
-		!add_task(task("TASK_GOTO_POSITION",MyName,pos(Xpos+((X-0.5)*10),Ypos,Zpos+((Z-0.5)*10)),"")).
-	
+		
+		?current_task(C);
+		if(not(C == nil)){
+			?current_task(task(C_priority, _, _, _, _));
+			?my_position(Xpos,Ypos,Zpos);
+			.random(X);
+			.random(Z);
+			NewX = Xpos + ((X-0.5)*10);
+			NewZ = Zpos + ((Z-0.5)*10);
+			+order(move,NewX,NewZ)[source (_)];
+		}.
 	
 /////////////////////////////////
 //  CHECK MEDIC ACTION (ONLY MEDICS)
