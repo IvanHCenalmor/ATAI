@@ -156,17 +156,8 @@ patrollingRadius(64).
  * <em> It's very useful to overload this plan. </em>
  *
  */
-+!perform_look_action 
-	<-	.random(RX);
-		.println("Random X: ", (RX-0.5)*10);
-		.random(RZ);
-		.println("Random Z: ", (RZ-0.5)*10);
-		?my_position(X,Y,Z);
-		.println("New position: X=", X+((RX-0.5)*10),", Y= ", Y,"Z= ", Z+((RZ-0.5)*10));
-		?current_task(task(C_priority, _, _, _, _));
-		.my_name(MyName);
-		
-		!add_task(task(C_priority + 1,"TASK_GOTO_POSITION",MyName,pos(X+((RX-0.5)*10),Y,Z+((RZ-0.5)*10)),"")).
++!perform_look_action .
+	
 		
 /// <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR PERFORM_LOOK_ACTION GOES HERE.") }.
 	
@@ -207,9 +198,9 @@ patrollingRadius(64).
         +task_priority("TASK_GET_OBJECTIVE",1000);
         +task_priority("TASK_ATTACK", 1000);
         +task_priority("TASK_RUN_AWAY", 1500);
-        +task_priority("TASK_GOTO_POSITION", 750);
+        +task_priority("TASK_GOTO_POSITION", 1500);
         +task_priority("TASK_PATROLLING", 500);
-        +task_priority("TASK_WALKING_PATH", 750).   
+        +task_priority("TASK_WALKING_PATH", 1500).   
 
 
 
@@ -226,7 +217,13 @@ patrollingRadius(64).
  *
  */
 +!update_targets 
-	<-	?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR UPDATE_TARGETS GOES HERE.") }.
+	<-	?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR UPDATE_TARGETS GOES HERE.") };
+	?my_position(Xpos,Ypos,Zpos);
+		.random(X);
+		.random(Z);
+		.my_name(MyName);
+		.println(Xpos+((X-0.5)*10),Ypos,Zpos+((Z-0.5)*10));
+		!add_task(task("TASK_GOTO_POSITION",MyName,pos(Xpos+((X-0.5)*10),Ypos,Zpos+((Z-0.5)*10)),"")).
 	
 	
 /////////////////////////////////
