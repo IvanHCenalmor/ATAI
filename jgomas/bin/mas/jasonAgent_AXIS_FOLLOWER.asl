@@ -208,9 +208,9 @@ patrollingRadius(64).
         +task_priority("TASK_GET_OBJECTIVE",1000);
         +task_priority("TASK_ATTACK", 1000);
         +task_priority("TASK_RUN_AWAY", 1500);
-        +task_priority("TASK_GOTO_POSITION", 750);
+        +task_priority("TASK_GOTO_POSITION", 1500);
         +task_priority("TASK_PATROLLING", 500);
-        +task_priority("TASK_WALKING_PATH", 750).   
+        +task_priority("TASK_WALKING_PATH", 1500).   
 
 
 
@@ -331,9 +331,8 @@ patrollingRadius(64).
 	  
 +goto(X,Y,Z)[source(A)]
 	<- 	.println("Recieved a message to goto from: ", A);
-		?current_task(task(C_priority, _, _, _, _));
 		.my_name(MyName);		
-		!add_task(task(C_priority + 1,"TASK_GOTO_POSITION",MyName,pos(X,Y,Z),""));
+		+order(move,X,Z)[source (_)];
 		.println("Goto crazy position: ", X," , ", Y," , ", Z);
 		-goto(_,_,_).
 
