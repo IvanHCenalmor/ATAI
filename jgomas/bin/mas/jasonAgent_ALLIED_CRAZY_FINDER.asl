@@ -123,72 +123,118 @@ if (Length > 0) {
         ?my_formattedTeam(MyTeam);
 
         if (AimedAgentTeam == 200) {
-				.nth(6, AimedAgent, NewDestination);
-				.term2string(NewDestination, DestinationString);	//The position is recieved as a structure so we have to pass it to String
-				!extractXZ(DestinationString);
-				?extractXZ(X, Z);
 				
-				if(not savedPos4){
-					.println("No guardado Pos4");
-					//If we do not have pos4 we have to look pos3
-					if(not savedPos3){
-						.println("No guardado Pos3");
-						//If we do not have pos3 we have to look pos2
-						if(not savedPos2){
-							.println("No guardado Pos2");
-							//If we do not have pos2 we have to look pos1
-							if(not savedPos1){
-								.println("No guardado Pos1");
-								//If we do not have pos1, we save it
-								+savedPos1;
-								-+pos1(X,Z);
-							}else{
-								.println("Guardada Pos1");
-								//If we have pos1, then save pos2
-								+savedPos2;
-								-+pos2(X,Z);
-							}
-						}else{
-							.println("Guardada Pos2");
-							//If we have pos2, then save pos3
-							+savedPos3;
-							-+pos3(X,Z);
-						}
-					}else{
-						.println("Guardada Pos3");
-						//If we have pos3, then save pos4
-						+savedPos4;
-						-+pos4(X,Z);
-					}
-				}else{
-					.println("Guardada Pos4");
-					//That means we have pos1, pos2, pos3 and pos4 and we can calculate the trajectory of the agent
-					?pos1(X1,Z1);
-					?pos2(X2,Z2);
-					?pos3(X3,Z3);
-					?pos4(X4,Z4);
-					
-					PredX3 = X2 + (X2 - X1);
-					PredZ3 = Z2 + (Z2 - Z1);
-					
-					if(math.round(X3*100) == math.round(PredX3*100) & math.round(Z3*100) == math.round(PredZ3*100)){
-						.println("El agente ", AimedAgent, " NO es esta Crazy.");
-					}else{
-						PredX4 = X3 + (X3 - X2);
-						PredZ4 = Z3 + (Z3 - Z2);
-						if(math.round(X4*100) == math.round(PredX4*100) & math.round(Z4*100) == math.round(PredZ4*100)){
-							.println("El agente ", AimedAgent, " NO es esta Crazy.");
-						}else{
-							.println("El agente ", AimedAgent, " SIII es esta Crazy. Toca atacarle.");
-						}
-					}
-					
-					-savedPos1;
-					-savedPos2;
-					-savedPos3;
-					-savedPos4;
+				if(not atLeastOneTime){
+					+atLeastOneTime;
+					+cont(1);
 				}
 				
+				if(cont(C) & C == 1){	//As this action is made twice for each movement of the AXIS, 
+										//it have a counter to only make it once each two.
+					-+cont(2);
+					
+					.nth(6, AimedAgent, NewDestination);
+					.nth(2, AimedAgent, AimedType);
+					.term2string(NewDestination, DestinationString);	//The position is recieved as a structure so we have to pass it to String
+					!extractXZ(DestinationString);
+					?extractXZ(X, Z);
+					
+					if(timesSeen(NumTimes) & NumTimes > 2){	//If it has tried more than 4 times but the type of the agent is not
+															//the same as the first read type, it deletes all the info like nothing has happened
+						-savedPos1;
+						-savedPos2;
+						-savedPos3;
+						-savedPos4;
+						-+timesSeen(1);
+					}else{
+						if(not savedPos4){
+							.println("No guardado Pos4");
+							//If we do not have pos4 we have to look pos3
+							if(not savedPos3){
+								.println("No guardado Pos3");
+								//If we do not have pos3 we have to look pos2
+								if(not savedPos2){
+									.println("No guardado Pos2");
+									//If we do not have pos2 we have to look pos1
+									if(not savedPos1){
+										.println("No guardado Pos1");
+										//If we do not have pos1, we save it
+										+savedPos1;
+										-+pos1(X,Z);
+										-+typeAgent(AimedType);
+										-+timesSeen(1);
+									}else{
+										.println("Guardada Pos1");
+										?typeAgent(InitialType);
+										if(AimedType == InitialType){
+											//If we have pos1, then save pos2
+											+savedPos2;
+											-+pos2(X,Z);
+										}else{
+											?timesSeen(T);
+											-+timesSeen(T+1);
+										}
+									}
+								}else{
+									.println("Guardada Pos2");
+									?typeAgent(InitialType);
+									if(AimedType == InitialType){
+										//If we have pos2, then save pos3
+										+savedPos3;
+										-+pos3(X,Z);
+									}else{
+										?timesSeen(T);
+										-+timesSeen(T+1);
+									}
+								}
+							}else{
+								.println("Guardada Pos3");
+								?typeAgent(InitialType);
+								if(AimedType == InitialType){
+									//If we have pos3, then save pos4
+									+savedPos4;
+									-+pos4(X,Z);
+								}else{
+									?timesSeen(T);
+									-+timesSeen(T+1);
+								}
+							}
+						}else{
+							.println("Guardada Pos4");
+							//That means we have pos1, pos2, pos3 and pos4 and we can calculate the trajectory of the agent
+							?pos1(X1,Z1);
+							?pos2(X2,Z2);
+							?pos3(X3,Z3);
+							?pos4(X4,Z4);
+							
+							PredX3 = X2 + (X2 - X1);
+							PredZ3 = Z2 + (Z2 - Z1);
+							
+							if(math.round(X3*100) == math.round(PredX3*100) & math.round(Z3*100) == math.round(PredZ3*100)){
+								.println("Agent ", AimedAgent, " is NOT Crazy.");
+							}else{
+								PredX4 = X3 + (X3 - X2);
+								PredZ4 = Z3 + (Z3 - Z2);
+								if(math.round(X4*100) == math.round(PredX4*100) & math.round(Z4*100) == math.round(PredZ4*100)){
+									.println("El agente ", AimedAgent, " NO es esta Crazy.");
+								}else{
+									.println("Agent ", AimedAgent, " IS Crazy. Attack it.");
+									+order(move,X4,Z4)[source (_)];	//We order to go to the last position we know of that agent we have evaluated
+																	//because if we go to actual X and Z it may not be the same agent.
+								}
+							}
+								
+							-savedPos1;
+							-savedPos2;
+							-savedPos3;
+							-savedPos4;
+							-+timesSeen(1);
+						}
+					}
+					
+				}else{
+					-+cont(1);
+				}
 
 				?debug(Mode); if (Mode<=1) { .println("NUEVO DESTINO DEBERIA SER: ", NewDestination); }
         }
@@ -405,7 +451,7 @@ if (Length > 0) {
 		//To obtain X
 		-+vl(LenPos - 1);
 		-+posString(Position);
-
+		while(posString(S) & vl(It) & FirstCom <= It){
 			.delete(It,S,StringReduced);
 			-+vl(It-1);
 			-+posString(StringReduced);
