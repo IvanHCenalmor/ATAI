@@ -104,16 +104,17 @@ if (Length > 0) {
         //.//;
         !look;
 		?my_position(X,Y,Z);
-		.println("I'm at: ",X," ",Y," ",Z);
+		//.println("I'm at: ",X," ",Y," ",Z);
 		?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
 		!distance(pos(ObjectiveX,ObjectiveY,ObjectiveZ));
 		?distance(D);
-		.println("Distance to flag: ", D);
+		//.println("Distance to flag: ", D);
 		
 		?base("Allied",X2,Y2,Z2);
 		!distance(pos(X2,Y2,Z2));
-		?distance(D2);
-		.println("Distance to base: ", D2).
+		?distance(D2)
+		//.println("Distance to base: ", D2)
+		.
         
 /////////////////////////////////
 //  PERFORM ACTIONS

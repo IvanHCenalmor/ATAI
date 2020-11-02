@@ -98,12 +98,12 @@ patrollingRadius(64).
     <-  
 		//Sends a message to follow this agent
 		?my_position(X, Y, Z);
-        .println("My position: ",X," , ",Y," , ", Z);
+        .println("My position: ",X," ",Y," ", Z);
         .my_team("AXIS", E1);
-        //.println("My team: ", E1 );
+        .println("My team: ", E1 );
         .concat("goto(",X, ", ", Y, ", ", Z,")", Content);
         .send_msg_with_conversation_id(E1, tell, Content, "GOTO");
-        //.println("Msg delivered.");
+        .println("Msg delivered.");
 		
 		//-waiting_look_response;
         .length(FOVObjects, Length);
@@ -218,17 +218,13 @@ patrollingRadius(64).
  */
 +!update_targets 
 	<-	?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR UPDATE_TARGETS GOES HERE.") };
-		
-		?current_task(C);
-		if(not(C == nil)){
-			?current_task(task(C_priority, _, _, _, _));
-			?my_position(Xpos,Ypos,Zpos);
-			.random(X);
-			.random(Z);
-			NewX = Xpos + ((X-0.5)*10);
-			NewZ = Zpos + ((Z-0.5)*10);
-			+order(move,NewX,NewZ)[source (_)];
-		}.
+	?my_position(Xpos,Ypos,Zpos);
+		.random(X);
+		.random(Z);
+		.my_name(MyName);
+		.println(Xpos+((X-0.5)*10),Ypos,Zpos+((Z-0.5)*10));
+		!add_task(task("TASK_GOTO_POSITION",MyName,pos(Xpos+((X-0.5)*10),Ypos,Zpos+((Z-0.5)*10)),"")).
+	
 	
 /////////////////////////////////
 //  CHECK MEDIC ACTION (ONLY MEDICS)

@@ -330,9 +330,9 @@ patrollingRadius(64).
       -cfa_refuse.
 	  
 +goto(X,Y,Z)[source(A)]
-	<- 	.println("Recieved a message to goto from: ", A);
+	<- 	//.println("Recieved a message to goto from: ", A);
 		+order(move,X,Z)[source (_)];
-		.println("Goto crazy position: ", X," , ", Y," , ", Z);
+		//.println("Goto crazy position: ", X," , ", Y," , ", Z);
 		-goto(_,_,_).
 
 
