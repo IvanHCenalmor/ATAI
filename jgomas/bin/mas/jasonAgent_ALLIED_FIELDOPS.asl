@@ -95,6 +95,20 @@ if (Length > 0) {
 /////////////////////////////////
 +look_response(FOVObjects)[source(M)]
     <-  //-waiting_look_response;
+	
+		?objChanged(Obj);
+		if(Obj==on){
+			//Sends a message to follow this agent
+			?my_position(X3, Y3, Z3);
+			.println("My position: ",X," , ",Y," , ", Z);
+			.my_team("ALLIED", E1);
+			//.println("My team: ", E1 );
+			.concat("goto(",X3, ", ", Y3, ", ", Z3,")", Content);
+			.send_msg_with_conversation_id(E1, tell, Content, "GOTO");
+			//.println("Msg delivered.");
+		}
+	
+	
         .length(FOVObjects, Length);
         if (Length > 0) {
             ///?debug(Mode); if (Mode<=1) { .println("HAY ", Length, " OBJETOS A MI ALREDEDOR:\n", FOVObjects); }
@@ -216,7 +230,15 @@ if (Length > 0) {
  */
 
 +!update_targets 
-	<-	?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR UPDATE_TARGETS GOES HERE.") }.
+	<-	?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR UPDATE_TARGETS GOES HERE.") };
+		?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
+		?objetivo(ObjectiveX2,ObjectiveY2,ObjectiveZ2);
+		
+		
+		if(not(ObjectiveX==ObjectiveX2) | not(ObjectiveZ==ObjectiveZ2)){
+			-+objChanged(on);
+		
+		}.
 	
 	
 	
@@ -319,6 +341,10 @@ if (Length > 0) {
    <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR cfa_refuse GOES HERE.")};
       -cfa_refuse.  
 
++goto(X,Y,Z)[source(A)]
+	<- 	//.println("Recieved a message to goto from: ", A);
+		+order(move,X,Z)[source (_)];
+		-goto(_,_,_).
 
 /////////////////////////////////
 //  Initialize variables
@@ -327,7 +353,10 @@ if (Length > 0) {
 +!init
    <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR init GOES HERE.")};
    ?my_position(X,Y,Z);
-   +base("Allied",X,Y,Z).
+   +base("Allied",X,Y,Z);
+   ?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
+   +objetivo(ObjectiveX,ObjectiveY,ObjectiveZ);
+   +objChanged(off).  
    
    
 
