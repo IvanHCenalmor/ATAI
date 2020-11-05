@@ -221,13 +221,31 @@ patrollingRadius(64).
 		
 		?current_task(C);
 		if(not(C == nil)){
-			?current_task(task(C_priority, _, _, _, _));
+			
 			?my_position(Xpos,Ypos,Zpos);
-			.random(X);
-			.random(Z);
-			NewX = Xpos + ((X-0.5)*10);
-			NewZ = Zpos + ((Z-0.5)*10);
-			+order(move,NewX,NewZ)[source (_)];
+		
+			+position(invalid);
+			while (position(invalid)) {
+				-position(invalid);
+				
+				//Random movement
+				.random(X);
+				.random(Z);
+				NewX = Xpos + ((X-0.5)*10);
+				NewZ = Zpos + ((Z-0.5)*10);
+				
+				?debug(Mode); if (Mode<=2) { .println("AXIS_FSM: New check position [", NewX,", ", Ypos, ", ", NewZ,"] position."); }
+				
+				check_position(pos(NewX, Ypos, NewZ));
+				
+				?position(P);
+				?debug(Mode); if (Mode<=2) { .println("AXIS_FSM: position is :", P); }
+				
+				-+newPos(NewX, NewZ);
+            }
+		
+			?newPos(NewRandomX, NewRandomZ);
+			+order(move,NewRandomX,NewRandomZ)[source (_)];
 		}.
 	
 /////////////////////////////////
