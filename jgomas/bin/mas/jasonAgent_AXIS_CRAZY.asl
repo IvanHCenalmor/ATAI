@@ -96,8 +96,8 @@ patrollingRadius(64).
 /////////////////////////////////
 +look_response(FOVObjects)[source(M)]
     <-  
-		//Sends a message to follow this agent
-		?my_position(X, Y, Z);
+	//Sends a message to follow this agent
+	?my_position(X, Y, Z);
         .println("My position: ",X," , ",Y," , ", Z);
         .my_team("AXIS", E1);
         //.println("My team: ", E1 );

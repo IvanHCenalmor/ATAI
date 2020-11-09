@@ -72,10 +72,40 @@ if (Length > 0) {
             ?my_formattedTeam(MyTeam);
             
             if (Team == 200) {  // Only if I'm ALLIED
-				
+					
                 ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
-                +aimed_agent(Object);
-                -+aimed("true");
+                
+                .nth(3, Object, Angle);
+                +bucle2(0);
+                +friendly(0);
+                .println("Hay enemigo: ", Object);
+                while(friendly(F) & F == 0 & bucle2(J) & (J < Length)){
+                    .nth(J, FOVObjects, Object2);
+                    .nth(2, Object2, Type2);
+                    if(not(Type2 > 1000)){
+                        .nth(1,Object2,Team2);
+                        if (Team2 == 100){
+                            .println("Hay aliado tambien: ", Object2);
+                            .nth(3, Object2, Angle2);
+                            if(((Angle - 5) < Angle2) & (Angle2 <= (Angle + 5))){
+                                .println("Esta en el angulo");
+                                -+friendly(1);
+                            }
+                        }
+                    }
+                    -+bucle2(J + 1);
+                }
+                
+                ?friendly(Friend);
+                
+                if(Friend == 0){
+                    .println("Le dispara");
+                    +aimed_agent(Object);
+                    -+aimed("true");
+                }
+                .println("No le dispara");
+                -friendly(_);
+                -bucle2(_);
                 
             }
             
@@ -118,16 +148,16 @@ if (Length > 0) {
         //.//;
         !look;
 		?my_position(X,Y,Z);
-		//.println("I'm at: ",X," ",Y," ",Z);
+		.println("I'm at: ",X," ",Y," ",Z);
 		?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
 		!distance(pos(ObjectiveX,ObjectiveY,ObjectiveZ));
 		?distance(D);
-		//.println("Distance to flag: ", D);
+		.println("Distance to flag: ", D);
 		
 		?base("Allied",X2,Y2,Z2);
 		!distance(pos(X2,Y2,Z2));
-		?distance(D2)
-		//.println("Distance to base: ", D2)
+		?distance(D2);
+		.println("Distance to base: ", D2);
 		.
         
 /////////////////////////////////
